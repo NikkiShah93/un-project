@@ -4,6 +4,7 @@ import json
 import os
 
 CWD = os.getcwd()
+PARENTDIR = os.path.dirname(os.getcwd()) #os.path.dirname(os.path.abspath(__file__))
 
 ## the api doesn't allow access to this dataset directly
 ## so we have to use page numbers to scrape the data
@@ -30,7 +31,11 @@ def get_data(url, table_name="table"):
     return data
 
 
-def get_file(path):
-    with open(path, 'r') as f:
+def get_file(path, parent=True):
+    if parent:
+        full_path = PARENTDIR + path
+    else:
+        full_path = CWD + path
+    with open(full_path, 'r') as f:
         file = json.load(f)
     return file
