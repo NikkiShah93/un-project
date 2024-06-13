@@ -4,13 +4,13 @@ from utils import get_file
 client = MongoClient("localhost", 27017)
 
 def create_meta(PATH = '\\data\\table-list.json',
-                 dbname = 'test_db', 
+                 db_name = 'test_db', 
                  parent=True,
                  meta_name = "mdata",
                  client=client):
     table_list = get_file(PATH, parent=parent)
     ## create a database
-    table_db = client[dbname]
+    table_db = client[db_name]
     if meta_name in table_db.list_collection_names():
         table_db[meta_name].drop()
     ## creating the metadata table
@@ -22,5 +22,25 @@ def create_meta(PATH = '\\data\\table-list.json',
 def get_meta(table_name = "mdata",
              db_name="test_db",
              client=client):
-    pass
+    return client[db_name][table_name].find({})
 
+def create_table(db_name = "test_db",
+                 table_name = "test_table",
+                 client = client,
+                 drop_if_exist = False):
+    try:
+        if table_name in client[db_name].list_collection_names() and drop_if_exist:
+            client[db_name][table_name].drop()
+        table = client[db_name][table_name]
+        return "success"
+    except Exception as e:
+        return e
+
+def insert_data(db_name = "test_db",
+                 table_name = "test_table",
+                 client = client,
+                 data=None):
+    if data is not None:
+        table = client[db_name][table_name]
+        table.insert_many(data)
+    return "success"
