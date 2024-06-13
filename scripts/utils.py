@@ -1,5 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
+import json
+import os
+
+CWD = os.getcwd()
 
 ## the api doesn't allow access to this dataset directly
 ## so we have to use page numbers to scrape the data
@@ -24,3 +28,9 @@ def get_data(url, table_name="table"):
         i += 1
         response = requests.get(url.replace("=pagenum", f"={i}"))
     return data
+
+
+def get_file(path):
+    with open(path, 'r') as f:
+        file = json.load(f)
+    return file
