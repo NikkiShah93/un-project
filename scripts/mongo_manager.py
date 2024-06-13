@@ -22,7 +22,10 @@ def create_meta(PATH = '\\data\\table-list.json',
 def get_meta(table_name = "mdata",
              db_name="test_db",
              client=client):
-    return client[db_name][table_name].find({})
+    try:
+        return client[db_name][table_name].find({})
+    except Exception as e:
+        return e
 
 def create_table(db_name = "test_db",
                  table_name = "test_table",
@@ -41,6 +44,19 @@ def insert_data(db_name = "test_db",
                  client = client,
                  data=None):
     if data is not None:
+        try:
+            table = client[db_name][table_name]
+            table.insert_one(data)
+            return "success"
+        except Exception as e:
+            return e
+
+def get_data(db_name = "test_db",
+            table_name = "test_table",
+            client = client,
+            filters = {}):
+    try:
         table = client[db_name][table_name]
-        table.insert_many(data)
-    return "success"
+        return table.find(filters)
+    except Exception as e:
+        return e
