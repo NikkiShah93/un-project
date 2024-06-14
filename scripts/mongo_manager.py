@@ -45,17 +45,16 @@ def create_table(db_name = "test_db",
 def create_doc(
         db_name="test_db",
         table_name="test_data",
-        object_id = None,
+        name = 'test_name',
         tags=None,
         data=None,
         client=client
 ):
     if data is not None:
         try:
-            if object_id is not None:
-                object_id = ObjectID(object_id)
+            
             doc = {
-                '_id': object_id,
+                'name': name,
                 'author': 'mongo_manager',
                 'date': int(time.time()),
                 'tags': tags,

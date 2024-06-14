@@ -4,6 +4,7 @@ import mongo_manager
 
 if __name__=="__main__":
     dbname = 'hazards-waste'
+    tablename = 'new-collection'
     data = {}
     ## creating the metadata table
     # counts = mongo_manager.create_meta(PATH = '\\data\\table-list.json',
@@ -50,10 +51,25 @@ if __name__=="__main__":
         for tag in vals:
             for col in tag:
                 if col != '_id':
-                    print(tag)
-                    print(f"{type(tag)}\n\nEND of TAG\n", col)
+                    # print(tag)
+                    # print(f"{type(tag)}\n\nEND of TAG\n", col)
                     new_set[obj][col] = tag[col]
-    print(new_set)
+    # print(new_set)
+    for obj in new_set:
+        response = mongo_manager.create_doc(
+            db_name=dbname,
+            table_name=tablename,
+            name=obj,
+            tags=obj.split('-'),
+            data=new_set[obj]
+
+        )
+        print(response)
+    full_file = list(mongo_manager.get_data(
+            db_name=dbname,
+            table_name=tablename
+    ))
+    print(full_file)
         # for d in obj:
         #     print(d)
     # ## getting the data for each table
