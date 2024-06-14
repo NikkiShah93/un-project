@@ -1,5 +1,8 @@
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 from utils import get_file
+import time    
+
 
 client = MongoClient("localhost", 27017)
 
@@ -38,6 +41,32 @@ def create_table(db_name = "test_db",
         return "success"
     except Exception as e:
         return e
+    
+def create_doc(
+        db_name="test_db",
+        table_name="test_data",
+        object_id = None,
+        tags=None,
+        data=None,
+        client=client
+):
+    if data is not None:
+        try:
+            if object_id is not None:
+                object_id = ObjectID(object_id)
+            doc = {
+                '_id': object_id,
+                'author': 'mongo_manager',
+                'date': int(time.time()),
+                'tags': tags,
+                'data': data
+            }
+            client[db_name][table_name].insert_one(doc)
+            return "success"
+        except Exception as e:
+            return e
+
+        
 
 def insert_data(db_name = "test_db",
                  table_name = "test_table",
