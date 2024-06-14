@@ -36,16 +36,26 @@ if __name__=="__main__":
     ## testing to see if the data is in the target table
     table_list = mongo_manager.get_meta(db_name=dbname,
                                         table_name="mdata")
-    
+    full_data = {}
     for table in table_list:
-        table_data = mongo_manager.get_data(
+        full_data[table['name']] = list(mongo_manager.get_data(
             db_name=dbname,
             table_name=table['name'],
-            # filters={'Year':'2022',
-            #          'Country or Area':'Canada'}
-                     )
-        break
-    print(list(table_data))
+            ))
+
+    print(full_data)
+    new_set = {}
+    for obj, vals in full_data.items():
+        new_set[obj] = {}
+        for tag in vals:
+            for col in tag:
+                if col != '_id':
+                    print(tag)
+                    print(f"{type(tag)}\n\nEND of TAG\n", col)
+                    new_set[obj][col] = tag[col]
+    print(new_set)
+        # for d in obj:
+        #     print(d)
     # ## getting the data for each table
     # for key in table_list:
     #     url = table_list[key]['url']
